@@ -1,0 +1,16 @@
+RewriteEngine On
+# RewriteBase /
+    # Redirect Trailing slashes if not a folder
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URL} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    #Remove the .php extension
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteRule ^(.*)$ $1.php
+
+    RewriteRule ^detail/([a-zA-Z0-9_-]+) detail.php?product=$1 [NC]
+    RewriteRule ^shop/([a-zA-Z0-9_-]+) shop.php?category=$1 [NC]
+    # RewriteRule ^detail/(\d+)/(\d+)/(\d+) detail/index?date=$1/$2/$3 [NC,L]
+    # ErrorDocument 404 https://spectrawebx.xyz/404
