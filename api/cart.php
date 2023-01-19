@@ -5,7 +5,7 @@ namespace Api;
 session_start();
 
 require_once __DIR__ . "/../config/db.php";
-require_once __DIR__ . "/../models/cart.php";
+require_once __DIR__ . "/../models/Cart.php";
 
 switch ($_SERVER["REQUEST_METHOD"]) {
     case "GET":

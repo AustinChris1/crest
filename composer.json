@@ -3,6 +3,7 @@
         "phpmailer/phpmailer": "^6.7",
         "google/apiclient": "2.12.1",
         "facebook/graph-sdk": "^5.1",
-        "thingengineer/mysqli-database-class": "dev-master"
+        "thingengineer/mysqli-database-class": "dev-master",
+        "lukasoppermann/http-status": "^3.2"
     }
 }

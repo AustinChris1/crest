@@ -1,5 +1,6 @@
 <?php
 include "includes/nav.php";
+use Models\Product;
 ?>
 <!-- Carousel Start -->
 <div class="container-fluid mb-3">
@@ -130,23 +131,22 @@ include "includes/nav.php";
 
 
 <!-- Products Start -->
-<div class="container-fluid pt-5 pb-3">
+<div x-data="{
+    init () {
+        fetch('/crest/api/products.php')
+            .then(res => res.json())
+            .then(products => this.products = products)
+            .catch(err => console.log(err))
+    },
+    products: []
+}" class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span></h2>
     <div class="row px-xl-5">
-        <?php
-        $products = $db->query("SELECT * FROM stock WHERE status = '0' ORDER BY id DESC LIMIT 10");
-        foreach ($products as $product) {
-            $slashed = (20 / 100) * $product['price'];
-            $slashed = $slashed + $product['price'];
-            $cart_id = $product['id'];
-            $rev = $db->query("SELECT * FROM review_table WHERE product_id = '$cart_id'");
-            $rev_row = $rev->num_rows;
-
-        ?>
+        <template x-for="product in products">
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="uploads/items/<?= $product['image'] ?>" alt="<?= $product['name'] ?>">
+                        <img class="img-fluid w-100" :src="'uploads/items/' + product.image" :alt="product.name">
                         <div class="product-action" data-id="<?php echo $product['id']; ?>">
                             <input type="hidden" name="prod_id" class="cartVal" value="<?= $product['id'] ?>">
                             <a class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
@@ -157,8 +157,8 @@ include "includes/nav.php";
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href=""><?= $product['name'] ?></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>&#8358; <?= $product['price'] ?></h5>
-                            <h6 class="text-muted ml-2"><del>&#8358; <?= $slashed ?></del></h6>
+                            <h5 x-html="'&#8358;' + product.price"></h5>
+                            <h6 class="text-muted ml-2"><del x-html="'&#8358;' + product.slashed"></del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>
@@ -166,46 +166,11 @@ include "includes/nav.php";
                             <small class="fa fa-star text-primary mr-1"></small>
                             <small class="fa fa-star text-primary mr-1"></small>
                             <small class="fa fa-star text-primary mr-1"></small>
-                            <small><?=$rev_row?></small>
+                            <small x-text="product.reviews.length"></small>
                         </div>
                     </div>
                 </div>
-                <script>
-                    document.querySelector('[data-id="<?php echo $product['id']; ?>"] .addToCart').addEventListener('click', function() {
-                        var inputValue = this.closest('[data-id="<?php echo $product['id']; ?>"]').querySelector('.cartVal').value;
-                        // alert(inputValue);
-                        var user_id = document.getElementById('uid').value
-                        var formdata = new FormData();
-                        formdata.append("product_id", inputValue);
-                        formdata.append("user_id", user_id);
-                        fetch("php/sendtocart.php", {
-                            method: 'POST',
-                            body: formdata,
-
-                        }).then(() => {
-                            swal({
-                                    title: "Added to cart",
-                                    text: "Do you want to proceed to checkout?",
-                                    icon: "success",
-                                    buttons: true,
-                                    dangerMode: false,
-                                })
-                                .then((willDelete) => {
-                                    if (willDelete) {
-                                        location.href = "checkout"
-                                    } else {}
-                                });
-
-                        })
-
-
-                    });
-                </script>
-
-            </div>
-        <?php
-        }
-        ?>
+        </template>
     </div>
 </div>
 <!-- Products End -->
