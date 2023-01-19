@@ -1,6 +1,21 @@
 <?php
+
+session_start();
+
 include "includes/nav.php";
 include "includes/auth.php";
+
+require_once __DIR__ . "/models/Cart.php";
+require_once __DIR__ . "/models/Product.php";
+
+use Models\Cart;
+use Models\Product;
+
+$cartItems = array_map(function ($item) {
+    $item->product = Product::where('id', 'stock_id')->getOne()->toArray();
+    return $item->toArray();
+}, Cart::where('status', 0)::where('user_id', $user_id)->get());
+
 ?>
 
 <!-- Breadcrumb Start -->
@@ -19,7 +34,9 @@ include "includes/auth.php";
 
 
 <!-- Cart Start -->
-<div class="container-fluid">
+<div class="container-fluid" x-data='{
+    items: <?php echo json_encode($cartItems); ?>
+}'>
     <div class="row px-xl-5">
         <div class="col-lg-8 table-responsive mb-5">
             <table class="table table-light table-borderless table-hover text-center mb-0">

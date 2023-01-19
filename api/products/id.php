@@ -14,7 +14,8 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         
         if (!$product) {
             http_response_code(404);
-            return HttpStatus->getReasonPhrase(404);
+            echo(HttpStatus->getReasonPhrase(404));
+            return;
         }
 
         $product->reviews = array_map(function ($review) {

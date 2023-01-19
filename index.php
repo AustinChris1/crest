@@ -1,6 +1,17 @@
 <?php
 include "includes/nav.php";
+require_once __DIR__ . "/models/Product.php";
+
 use Models\Product;
+
+$recentProducts = array_map(function ($product) {
+    $product->reviews = array_map(function ($review) {
+        return $review->toArray();
+    }, $product->getReviews());
+
+    return $product->toArray();
+}, Product::where('status', 0)::orderBy("id", "desc")->get(10));
+
 ?>
 <!-- Carousel Start -->
 <div class="container-fluid mb-3">
@@ -131,15 +142,9 @@ use Models\Product;
 
 
 <!-- Products Start -->
-<div x-data="{
-    init () {
-        fetch('/crest/api/products.php')
-            .then(res => res.json())
-            .then(products => this.products = products)
-            .catch(err => console.log(err))
-    },
-    products: []
-}" class="container-fluid pt-5 pb-3">
+<div x-data='{
+    products: <?php echo json_encode($recentProducts); ?>
+}' class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span></h2>
     <div class="row px-xl-5">
         <template x-for="product in products">
@@ -147,15 +152,14 @@ use Models\Product;
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100" :src="'uploads/items/' + product.image" :alt="product.name">
-                        <div class="product-action" data-id="<?php echo $product['id']; ?>">
-                            <input type="hidden" name="prod_id" class="cartVal" value="<?= $product['id'] ?>">
-                            <a class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
+                        <div class="product-action">
+                            <a class="btn btn-outline-dark btn-square addToCart" @click="$store.cart.addItem(product)"><i class="fa fa-shopping-cart"></i></a>
                             <a class="btn btn-outline-dark btn-square"><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" onclick="window.location='detail/<?= $product['url']?>'"><i class="fa fa-search"></i></a>
+                            <a class="btn btn-outline-dark btn-square" @click="window.location='detail/' + product.url"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href=""><?= $product['name'] ?></a>
+                        <a class="h6 text-decoration-none text-truncate" href="" x-text="product.name"></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5 x-html="'&#8358;' + product.price"></h5>
                             <h6 class="text-muted ml-2"><del x-html="'&#8358;' + product.slashed"></del></h6>
