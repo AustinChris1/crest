@@ -121,9 +121,9 @@ $date = date('Y-m-d', strtotime($now . '+ 7 days'));
 $last_transaction = null;
 $product_name = null;
 //check if wallet address sent usdt to wallet
-foreach (array_slice($crypto_data['result'], -2) as $key) {
+foreach (array_slice($crypto_data['result'], -5) as $key) {
     if (in_array($address, $key) && in_array($val, $key)) {
-        if ($address == $key['from']) {
+        if ($address === $key['from']) {
             $last_transaction = $key;
         }
     }

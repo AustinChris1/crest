@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 
 include "includes/nav.php";
 include "includes/auth.php";

@@ -8,10 +8,10 @@ RewriteEngine On
     #Remove the .php extension
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
-    RewriteRule ^(.*)$ $1.php [L]
+    RewriteRule ^(.*)$ $1.php
 
-    RewriteRule ^detail/([a-zA-Z0-9_-]+) detail.php?product=$1 [L]
-    RewriteRule ^shop/([a-zA-Z0-9_-]+) shop.php?category=$1 [L]
+    RewriteRule ^detail/([a-zA-Z0-9_-]+) detail.php?product=$1
+    RewriteRule ^shop/([a-zA-Z0-9_-]+) shop.php?category=$1
 
     RewriteRule ^api/products/([0-9]+)$ api/products/id.php?id=$1 [L,QSA]
     # RewriteRule ^detail/(\d+)/(\d+)/(\d+) detail/index?date=$1/$2/$3 [NC,L]
