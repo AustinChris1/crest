@@ -18,7 +18,7 @@ function sendemail($email)
     $mail->Port = 465;
 
     $mail->Username = "info@spectrawebx.xyz";
-    $mail->Password = "Blabla789?";
+    $mail->Password = getenv("MAIL_PASSWORD");
 
     $mail->setFrom("info@spectrawebx.xyz", "Spectra Web-X");
     $mail->addAddress($email);
