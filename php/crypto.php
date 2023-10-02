@@ -18,7 +18,7 @@ function sendemail($email,$order_id,$date,$value, $product_name,$order_address)
   $mail->Port = 465;
 
   $mail->Username = "info@spectrawebx.xyz";
-  $mail->Password = "Blabla789?";
+  $mail->Password = getenv("MAIL_PASSWORD");
 
   $mail->setFrom("info@spectrawebx.xyz", "Crest Management");
   $mail->addAddress($email);
@@ -50,7 +50,7 @@ function sendemail_admin($name,$phone,$order_id,$date,$value, $product_name,$ord
   $mail->Port = 465;
 
   $mail->Username = "info@spectrawebx.xyz";
-  $mail->Password = "Blabla789?";
+  $mail->Password = getenv("MAIL_PASSWORD");
 
   $mail->setFrom("info@spectrawebx.xyz", "Crest Management");
   $mail->addAddress('info@spectrawebx.xyz');
