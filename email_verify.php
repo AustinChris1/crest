@@ -18,7 +18,7 @@ function resend_email_verify($name, $email, $verify_token)
     $mail->Port = 465;
 
     $mail->Username = "info@spectrawebx.xyz";
-    $mail->Password = "Blabla789?";
+    $mail->Password = getenv("MAIL_PASSWORD");
 
     $mail->setFrom("info@spectrawebx.xyz", "Crest Management");
     $mail->addAddress($email);
